@@ -13,10 +13,10 @@ const setupAndStartServer = () => {
 
     app.use("/api", apiRoutes);
 
-    app.listen(PORT , () => {
-        console.log(`server started at PORT: ${PORT}`);
-    })
-
+    app.listen(PORT, () => {
+        console.log(`server started at PORT: ${PORT}`); 
+    })  
+    
 }
 
 setupAndStartServer();
