@@ -1,4 +1,5 @@
 const { UserService } = require("../services/index");
+const { StatusCodes } = require("http-status-codes");
 
 const userService = new UserService();
 const jwt = require("jsonwebtoken");
@@ -16,10 +17,9 @@ const create = async (req, res) => {
             data: response
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: "something went wrong",
-            error: error,
+        res.status(error.statusCode).json({
+            message: error.message,
+            error: error.explanation,
             data: {},
             success: false
         })

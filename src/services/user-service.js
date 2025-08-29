@@ -8,6 +8,7 @@ const {
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const AppErrors = require("../utils/error-handlers");
 
 class UserService {
     constructor() {
@@ -19,8 +20,16 @@ class UserService {
             const user = await this.userRepository.create(data);
             return user;
         } catch (error) {
+            if(error.name == "SequelizeValidationError"){
+                throw error;
+            }
             console.log("something went wrong in the service layer");
-            throw { error };
+            throw new AppErrors(
+                "server error",
+                "something went wrong in service",
+                "logical issue found",
+                500
+            );
         }
     }
 
@@ -30,7 +39,7 @@ class UserService {
             return user;
         } catch (error) {
             console.log("something went wrong in the service layer");
-            throw { error };
+            throw error;
         }
     }
 
@@ -42,7 +51,7 @@ class UserService {
             return token;
         } catch (error) {
             console.log("something went wrong in the token creation");
-            throw { error };
+            throw error;
         }
     }
 
@@ -52,7 +61,7 @@ class UserService {
             return response;
         } catch (error) {
             console.log("something went wrong in the token validation");
-            throw { error };
+            throw error;
         }
     }
 
@@ -70,7 +79,7 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong in the token validation");
-            throw { error };
+            throw error;
         }
     }
 
@@ -80,7 +89,7 @@ class UserService {
             return response;
         } catch (error) {
             console.log("something went wrong while comparing password");
-            throw { error };
+            throw error;
         }
     }
 
@@ -104,7 +113,7 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong while signing in");
-            throw { error };
+            throw error;
         }
     }
 
@@ -113,7 +122,7 @@ class UserService {
             return this.userRepository.isAdmin(userId);
         } catch (error) {
             console.log("something went wrong in the service layer");
-            throw { error }; 
+            throw error; 
         }
     }
 
