@@ -4,6 +4,7 @@ const {
 } = require('sequelize');
 
 const bcrypt = require("bcrypt");
+const { UserService } = require("../services/index");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -14,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsToMany(models.Role, {
+        through: "User_Roles"
+      })
     }
   }
   User.init({
@@ -33,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
           args: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/
         }
       }
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     sequelize,
@@ -44,6 +52,6 @@ module.exports = (sequelize, DataTypes) => {
     const encryptedPassword = bcrypt.hashSync(user.password, salt);
     user.password = encryptedPassword;
   });
-
+  
   return User;
 };

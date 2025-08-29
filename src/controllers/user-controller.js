@@ -1,6 +1,7 @@
 const { UserService } = require("../services/index");
 
 const userService = new UserService();
+const jwt = require("jsonwebtoken");
 
 const create = async (req, res) => {
     try {
@@ -45,7 +46,51 @@ const signIn = async (req, res) => {
     }
 }
 
+const isAuthenticated = async (req, res) => {
+    try {
+        const token = req.headers["x-access-token"];
+        const response = await userService.isAuthenticated(token);
+        return res.status(200).json({
+            success: true,
+            error: {},
+            data: response,
+            message: "user is authenticated"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "something went wrong",
+            error: error,
+            data: {},
+            success: false
+        })
+    }
+}
+
+// const verify = (req, res) => {
+//     try {
+//         const { token } = req.query;
+//         const response = userService.validateToken(token);
+//         return res.status(200).json({
+//             success: true,
+//             error: {},
+//             data: response,
+//             message: "email verified"
+//         })
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({
+//             message: "something went wrong",
+//             error: error,
+//             data: {},
+//             success: false
+//         })
+//     }
+// }
+
 module.exports = {
     create,
-    signIn
+    signIn,
+    isAuthenticated,
+    // verify
 }
