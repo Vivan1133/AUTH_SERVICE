@@ -21,6 +21,12 @@ router.get(
     UserController.isAuthenticated
 );
 
+router.get(
+    "/isAdmin",
+    AuthRequestValidatorMiddleWare.validateIsAdminRequest,
+    UserController.isAdmin
+);
+
 // router.get(
 //     "/verify",
 //     UserController.verify
